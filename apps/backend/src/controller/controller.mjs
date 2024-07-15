@@ -12,6 +12,7 @@ const attendanceSchema = z.object({
 
 export default class Controller {
 
+    
     store(request, response) {
 
         const {success, data, error} = attendanceSchema.safeParse(request.body)
@@ -31,9 +32,11 @@ export default class Controller {
         return response.status(200).send({ message: 'Agendamento criado com sucesso.' })
     }
 
+
     index(request, response) {
         response.status(200).send(attendances)
     }
+
 
     getOne(request, response) {
         const { id } = request.params
@@ -46,6 +49,7 @@ export default class Controller {
     
         return response.status(200).send(attendance)
     }
+
 
     update(request, response) {
         const { id } = request.params
@@ -63,6 +67,7 @@ export default class Controller {
         return response.status(200).send({ message: 'Agendamento atualizado'})
 
     }
+
 
     destroy(request, response) {
         const { id } = request.params
