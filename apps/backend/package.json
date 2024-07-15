@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "express": "^4.19.2",
+    "node": "^18.20.4",
+    "nodemon": "^3.1.4",
+    "zod": "^3.23.8"
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "dev": "nodemon src/index.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictorAGuerra/Portal-Covid.git"
+  },
+  "author": "VictorAGuerra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VictorAGuerra/Portal-Covid/issues"
+  },
+  "homepage": "https://github.com/VictorAGuerra/Portal-Covid#readme",
+  "description": ""
+}
