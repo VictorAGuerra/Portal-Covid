@@ -27,7 +27,11 @@ export default class Controller {
             id: id,
             ...data,
             status: 'agendado',
+            conclusion: null,
         });
+
+        //temporário!!
+        alert('Agendamento criado com sucesso.')
 
         return response.status(200).send({ message: 'Agendamento criado com sucesso.' })
     }
