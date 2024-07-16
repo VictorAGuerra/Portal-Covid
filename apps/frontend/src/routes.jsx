@@ -1,11 +1,14 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import Home from './pages/Home'
+import Sidebar from './components/Sidebar'
+import FormPage from './pages/FormPage'
 
 
 const AppRoutes = () => (
     <BrowserRouter>
         <Routes>
-            <Route element={<Home />} path='/' />
+            <Route element={<Sidebar />} path='/'>
+                <Route element={<FormPage />} path='formpage'/>
+            </Route>
         </Routes>
     </BrowserRouter>
 )

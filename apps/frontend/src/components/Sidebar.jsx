@@ -16,13 +16,14 @@ import {
     FiMenu,
     FiFilePlus,
 } from 'react-icons/fi';
+import { Outlet } from 'react-router-dom';
 
 const LinkItems = [
     { name: 'Fazer Agendamento', icon: FiFilePlus },
     { name: 'Consultar Agendamentos', icon: FiCalendar },
 ];
 
-export default function Home() {
+export default function Sidebar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -42,6 +43,7 @@ export default function Home() {
             <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
             <Box ml={{ base: 0, md: 60 }} p="4">
                 {/* Content */}
+                <Outlet />
             </Box>
         </Box>
     );
