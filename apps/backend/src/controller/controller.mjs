@@ -5,10 +5,17 @@ import crypto from 'node:crypto'
 const attendances = []
 
 const attendanceSchema = z.object({
-    name: z.string().min(2).max(20),
-    birth: z.string().date(),
-    datetime: z.string().datetime(),
-})
+    name: z.string().min(2).max(60),
+    birth: z.string().refine((val) => {
+        const [day, month, year] = val.split('/')
+        const date = new Date(`${year}/${month}/${day}`)
+        return !isNaN(date)
+    }),
+    datetime: z.string().refine((val) => {
+        const date = new Date(val);
+        return !isNaN(date);
+    })
+});
 
 export default class Controller {
 
@@ -28,10 +35,7 @@ export default class Controller {
             ...data,
             status: 'agendado',
             conclusion: null,
-        });
-
-        //temporário!!
-        alert('Agendamento criado com sucesso.')
+        })
 
         return response.status(200).send({ message: 'Agendamento criado com sucesso.' })
     }

@@ -1,16 +1,25 @@
+import DatePicker from "react-datepicker";
+import './calendar.css';
+import { useState, forwardRef } from "react";
+import { format } from 'date-fns';
 
-import DatePicker from "react-datepicker"
-import './BirthCalendar.css'
+const BirthCalendar = forwardRef(({ setValue, name }, ref) => {
+  const [date, setDate] = useState(null);
 
-const BirthCalendar = () => {
+  const handleChange = (date) => {
+    setDate(date);
+    setValue(name, date ? format(date, 'dd/MM/yyyy') : "")
+  }
 
-    return (
-      <DatePicker
-        selected={new Date()}
-        className="birthcalendar"
-        dateFormat={"dd/MM/yyyy"}
-      />
-    )
-}
+  return (
+    <DatePicker
+      selected={date}
+      onChange={handleChange}
+      className="calendar"
+      dateFormat="dd/MM/yyyy"
+      ref={ref}
+    />
+  );
+});
 
-export default BirthCalendar
+export default BirthCalendar;

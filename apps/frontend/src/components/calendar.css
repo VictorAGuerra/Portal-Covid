@@ -1,4 +1,4 @@
-.birthcalendar {
+.calendar {
     width: 100%;
     height: var(--input-height);
     font-size: var(--input-font-size);
@@ -32,8 +32,16 @@
 
 .react-datepicker-wrapper {
     width: 100%;
-}
+} 
 
 .react-datepicker-wrapper :focus {
     border: 2px solid #0BC5E4;
+}
+
+.react-datepicker {
+    display: flex;
+}
+
+.react-datepicker-popper {
+    display: flex;
 }
