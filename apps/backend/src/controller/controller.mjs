@@ -27,7 +27,7 @@ export default class Controller {
             return response.status(400).send({ error });
         }
 
-        const { name, birth, datetime } = data;
+        const { name, birth, datetime, status, conclusion } = data;
 
         const sameTimeAppointments = attendances.filter(item => item.datetime === datetime);
 
@@ -50,8 +50,8 @@ export default class Controller {
             name,
             birth,
             datetime,
-            status: 'agendado',
-            conclusion: null
+            status: status? status :'agendado',
+            conclusion: conclusion? conclusion : null
         });
 
         return response.status(200).send({ message: 'Agendamento criado com sucesso.' });
