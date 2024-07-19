@@ -16,11 +16,11 @@ import {
     FiMenu,
     FiFilePlus,
 } from 'react-icons/fi';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 const LinkItems = [
-    { name: 'Fazer Agendamento', icon: FiFilePlus },
-    { name: 'Consultar Agendamentos', icon: FiCalendar },
+    { name: 'Fazer Agendamento', icon: FiFilePlus, destination: "/formpage"},
+    { name: 'Consultar Agendamentos', icon: FiCalendar, destination: "/schedulepage"},
 ];
 
 export default function Sidebar() {
@@ -66,7 +66,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
                 <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
             </Flex>
             {LinkItems.map((link) => (
-                <NavItem key={link.name} icon={link.icon}>
+                <NavItem key={link.name} icon={link.icon} to={link.destination}>
                     {link.name}
                 </NavItem>
             ))}
@@ -74,11 +74,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
     );
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, children, to, ...rest }) => {
     return (
         <Box
-            as="a"
-            href="#"
+            as={Link}
+            to={to}
             style={{ textDecoration: 'none' }}
             _focus={{ boxShadow: 'none' }}>
             <Flex

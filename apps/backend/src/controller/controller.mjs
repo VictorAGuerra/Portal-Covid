@@ -19,25 +19,42 @@ const attendanceSchema = z.object({
 
 export default class Controller {
 
-    
+
     store(request, response) {
-
-        const {success, data, error} = attendanceSchema.safeParse(request.body)
-
-        const [id] = crypto.randomUUID().split('-')
+        const { success, data, error } = attendanceSchema.safeParse(request.body);
 
         if (!success) {
-            return response.status(400).send(error)
+            return response.status(400).send({ error });
         }
+
+        const { name, birth, datetime } = data;
+
+        const sameTimeAppointments = attendances.filter(item => item.datetime === datetime);
+
+        if (sameTimeAppointments.length >= 2) {
+            return response.status(400).send({ message: 'Horário indisponível.' });
+        }
+
+        const [date] = datetime.split('T');
+
+        const sameDayAppointments = attendances.filter(item => item.datetime.startsWith(date));
+
+        if (sameDayAppointments.length >= 20) {
+            return response.status(400).send({ message: 'Não há vagas disponíveis para esse dia.' });
+        }
+
+        const [id] = crypto.randomUUID().split('-');
 
         attendances.push({
             id: id,
-            ...data,
+            name,
+            birth,
+            datetime,
             status: 'agendado',
-            conclusion: null,
-        })
+            conclusion: null
+        });
 
-        return response.status(200).send({ message: 'Agendamento criado com sucesso.' })
+        return response.status(200).send({ message: 'Agendamento criado com sucesso.' });
     }
 
 
@@ -48,13 +65,13 @@ export default class Controller {
 
     getOne(request, response) {
         const { id } = request.params
-    
+
         const attendance = attendances.find(item => item.id === id)
-    
+
         if (!attendance) {
             return response.status(404).send({ message: 'Agendamento não encontrado.' })
         }
-    
+
         return response.status(200).send(attendance)
     }
 
@@ -72,7 +89,7 @@ export default class Controller {
 
         attendance.status = status || attendance.status
 
-        return response.status(200).send({ message: 'Agendamento atualizado'})
+        return response.status(200).send({ message: 'Agendamento atualizado' })
 
     }
 
@@ -87,7 +104,7 @@ export default class Controller {
         }
 
         attendances.splice(index, 1)
-        
-        return response.status(200).send({ message: 'Agendamento removido com sucesso.'})
+
+        return response.status(200).send({ message: 'Agendamento removido com sucesso.' })
     }
 }

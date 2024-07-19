@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     Flex,
     Box,
@@ -10,39 +11,39 @@ import {
     Text,
     useColorModeValue,
     FormErrorMessage,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import 'react-datepicker/dist/react-datepicker.css';
-import BirthCalendar from '../components/BirthCalendar';
-import DateTimeCalendar from '../components/DateTimeCalendar';
-import { z } from 'zod';
 import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import DateTimeCalendar from '../components/DateTimeCalendar';
+import BirthCalendar from '../components/BirthCalendar';
+import { createAttendance } from '../../services/api';
+import { useNotification } from '../../context/NotificationContext';
 
 const formSchema = z.object({
-    name: z.string().min(2, "Preencha seu nome.").max(60, "Não exceda o limite de caracteres"),
-    birth: z.string().refine((val) => {
-        const [day, month, year] = val.split('/')
-        const date = new Date(`${year}/${month}/${day}`)
-        return !isNaN(date)
-    }, {
-        message: "Data inválida."
-    }),
-    datetime: z.string().refine((val) => {
-        const date = new Date(val);
-        return !isNaN(date);
-    }, {
-        message: "Dia e horário inválidos"
-    })
+    name: z.string().min(2, "Preencha seu nome").max(60),
+    birth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Data inválida"),
+    datetime: z.string().nonempty("Data e hora são obrigatórias"),
 });
 
 export default function FormPage() {
-    const { register, handleSubmit, formState, control, setValue } = useForm({
+    const { register, handleSubmit, control, formState: { errors } } = useForm({
         resolver: zodResolver(formSchema),
-        mode: 'onBlur'
+        mode: 'onChange'
     });
 
-    const submitForm = (data) => {
-        console.log("SUBMIT", data);
+    const { showNotification } = useNotification();
+
+    const submitForm = async (data) => {
+        try {
+            const response = await createAttendance(data);
+            showNotification('Agendamento criado com sucesso!', 'success');
+            console.log(response);
+        } catch (error) {
+            showNotification(error.response.data.message, 'error');
+            console.error(error);
+        }
     };
 
     return (
@@ -64,64 +65,61 @@ export default function FormPage() {
                     p={8}>
                     <form onSubmit={handleSubmit(submitForm)}>
                         <Stack spacing={4}>
-
-                            <FormControl id="name" isRequired isInvalid={!!formState.errors.name}>
+                            <FormControl id="name" isRequired isInvalid={!!errors.name}>
                                 <FormLabel>Nome</FormLabel>
                                 <Input focusBorderColor='cyan.400' {...register("name")} />
                                 <FormErrorMessage>
-                                    {formState.errors.name?.message}
+                                    {errors.name?.message}
                                 </FormErrorMessage>
                             </FormControl>
 
-                            <FormControl id="birth" isRequired isInvalid={!!formState.errors.birth}>
+                            <FormControl id="birth" isRequired isInvalid={!!errors.birth}>
                                 <FormLabel>Data de Nascimento</FormLabel>
                                 <Controller
-                                    name="birth"
                                     control={control}
-                                    render={({ field }) => (
+                                    name="birth"
+                                    render={({ field: { onChange, value, ref } }) => (
                                         <BirthCalendar
-                                            {...field}
-                                            setValue={setValue}
+                                            setValue={(name, value) => onChange(value)}
                                             name="birth"
+                                            ref={ref}
                                         />
                                     )}
                                 />
                                 <FormErrorMessage>
-                                    {formState.errors.birth?.message}
+                                    {errors.birth?.message}
                                 </FormErrorMessage>
                             </FormControl>
 
-                            <FormControl id="datetime" isRequired isInvalid={!!formState.errors.birth}>
-                                <FormLabel>Data e Hora do agendamento</FormLabel>
+                            <FormControl id="datetime" isRequired isInvalid={!!errors.datetime}>
+                                <FormLabel>Data e Hora do Agendamento</FormLabel>
                                 <Controller
-                                    name="datetime"
                                     control={control}
-                                    render={({ field }) => (
+                                    name="datetime"
+                                    render={({ field: { onChange, value, ref } }) => (
                                         <DateTimeCalendar
-                                            {...field}
-                                            setValue={setValue}
+                                            setValue={(name, value) => onChange(value)}
                                             name="datetime"
+                                            ref={ref}
                                         />
                                     )}
                                 />
                                 <FormErrorMessage>
-                                    {formState.errors.datetime?.message}
+                                    {errors.datetime?.message}
                                 </FormErrorMessage>
                             </FormControl>
 
                             <Stack spacing={10}>
                                 <Button
+                                    type="submit"
                                     bg={'blue.400'}
                                     color={'white'}
                                     _hover={{
                                         bg: 'blue.500',
-                                    }}
-                                    type="submit"
-                                >
+                                    }}>
                                     Enviar
                                 </Button>
                             </Stack>
-
                         </Stack>
                     </form>
                 </Box>

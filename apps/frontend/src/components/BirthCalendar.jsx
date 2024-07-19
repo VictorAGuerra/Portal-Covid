@@ -8,8 +8,8 @@ const BirthCalendar = forwardRef(({ setValue, name }, ref) => {
 
   const handleChange = (date) => {
     setDate(date);
-    setValue(name, date ? format(date, 'dd/MM/yyyy') : "")
-  }
+    setValue(name, date ? format(date, 'yyyy-MM-dd') : "")
+  };
 
   return (
     <DatePicker
