@@ -1,6 +1,6 @@
 import DatePicker from "react-datepicker";
 import './calendar.css';
-import { useState, useEffect, forwardRef } from "react";
+import { React, useState, useEffect, forwardRef } from "react";
 import { getAttendances } from '../../services/api.mjs';
 
 const DateTimeCalendar = forwardRef(({ setValue, name }, ref) => {

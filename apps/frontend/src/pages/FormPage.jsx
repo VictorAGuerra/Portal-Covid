@@ -19,7 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import DateTimeCalendar from '../components/DateTimeCalendar';
 import BirthCalendar from '../components/BirthCalendar';
 import { createAttendance } from '../../services/api';
-import { useNotification } from '../../context/NotificationContext';
+import { useNotification } from '../context/NotificationContext';
 
 const formSchema = z.object({
     name: z.string().min(2, "Preencha seu nome").max(60),

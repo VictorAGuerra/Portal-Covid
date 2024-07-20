@@ -16,14 +16,14 @@ import {
     FiMenu,
     FiFilePlus,
 } from 'react-icons/fi';
-import { Link, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LinkItems = [
-    { name: 'Fazer Agendamento', icon: FiFilePlus, destination: "/formpage"},
-    { name: 'Consultar Agendamentos', icon: FiCalendar, destination: "/schedulepage"},
+    { name: 'Fazer Agendamento', icon: FiFilePlus, destination: "/form"},
+    { name: 'Consultar Agendamentos', icon: FiCalendar, destination: "/schedule"},
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ children }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -43,7 +43,7 @@ export default function Sidebar() {
             <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
             <Box ml={{ base: 0, md: 60 }} p="4">
                 {/* Content */}
-                <Outlet />
+                {children}
             </Box>
         </Box>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton, Box } from '@chakra-ui/react';
-import { useNotification } from '../../context/NotificationContext';
+import { useNotification } from '../context/NotificationContext';
 
 const NotificationPopup = () => {
     const { isOpen, message, type, onClose } = useNotification();

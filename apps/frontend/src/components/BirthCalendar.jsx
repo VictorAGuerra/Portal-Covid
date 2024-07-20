@@ -1,6 +1,6 @@
 import DatePicker from "react-datepicker";
 import './calendar.css';
-import { useState, forwardRef } from "react";
+import { React, useState, forwardRef } from "react";
 import { format } from 'date-fns';
 
 const BirthCalendar = forwardRef(({ setValue, name }, ref) => {

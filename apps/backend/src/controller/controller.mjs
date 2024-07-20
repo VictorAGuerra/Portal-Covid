@@ -17,6 +17,11 @@ const attendanceSchema = z.object({
     })
 });
 
+const updateSchema = z.object({
+    status: z.string().max(15),
+    conclusion: z.string().max(40)
+})
+
 export default class Controller {
 
 
@@ -27,7 +32,7 @@ export default class Controller {
             return response.status(400).send({ error });
         }
 
-        const { name, birth, datetime, status, conclusion } = data;
+        const { name, birth, datetime } = data;
 
         const sameTimeAppointments = attendances.filter(item => item.datetime === datetime);
 
@@ -50,8 +55,8 @@ export default class Controller {
             name,
             birth,
             datetime,
-            status: status? status :'agendado',
-            conclusion: conclusion? conclusion : null
+            status: 'agendado',
+            conclusion: null
         });
 
         return response.status(200).send({ message: 'Agendamento criado com sucesso.' });
@@ -79,7 +84,13 @@ export default class Controller {
     update(request, response) {
         const { id } = request.params
 
-        const { status } = request.body
+        const { success, data, error } = updateSchema.safeParse(request.body)
+
+        if (!success) {
+            return response.status(400).send({ error });
+        }
+
+        const { status, conclusion } = data;
 
         const attendance = attendances.find(item => item.id === id)
 
@@ -88,6 +99,7 @@ export default class Controller {
         }
 
         attendance.status = status || attendance.status
+        attendance.conclusion = conclusion || attendance.conclusion
 
         return response.status(200).send({ message: 'Agendamento atualizado' })
 

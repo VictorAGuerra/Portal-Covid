@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 const NotificationContext = createContext();
